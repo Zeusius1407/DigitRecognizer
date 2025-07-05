@@ -20,10 +20,6 @@ model = Sequential([
     #Block 3
     Conv2D(128, (3,3), activation='relu', padding='same', input_shape=(28, 28, 1)),
     BatchNormalization(),
-    MaxPooling2D((2,2)),
-    #Block 4
-    Conv2D(256, (3,3), activation='relu', padding='same', input_shape=(28, 28, 1)),
-    BatchNormalization(),
 
     Flatten(),
     Dense(512, activation='relu'),
