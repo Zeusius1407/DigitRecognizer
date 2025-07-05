@@ -9,25 +9,25 @@ x_train = x_train[..., tf.newaxis] / 255.0
 x_test = x_test[..., tf.newaxis] / 255.0
 
 model = Sequential([
-    #Block 1
-    Conv2D(32, (3,3), activation='relu', padding='same', input_shape=(28, 28, 1)),
+    Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=(28, 28, 1)),
     BatchNormalization(),
-    MaxPooling2D((2,2)),
-    #Block 2
-    Conv2D(64, (3,3), activation='relu', padding='same', input_shape=(28, 28, 1)),
+    Conv2D(32, (3, 3), activation='relu', padding='same'),
+    MaxPooling2D(),
+    Dropout(0.25),
+
+    Conv2D(64, (3, 3), activation='relu', padding='same'),
     BatchNormalization(),
-    MaxPooling2D((2,2)),
-    #Block 3
-    Conv2D(128, (3,3), activation='relu', padding='same', input_shape=(28, 28, 1)),
-    BatchNormalization(),
+    Conv2D(64, (3, 3), activation='relu', padding='same'),
+    MaxPooling2D(),
+    Dropout(0.25),
 
     Flatten(),
-    Dense(512, activation='relu'),
+    Dense(256, activation='relu'),
     Dropout(0.5),
     Dense(10, activation='softmax')
 ])
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=5, validation_split=0.1)
+model.fit(x_train, y_train, epochs=15, validation_split=0.1)
 
 model.save("mnist_cnn.h5")
