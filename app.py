@@ -4,6 +4,7 @@ from PIL import Image
 import tensorflow as tf
 from streamlit_drawable_canvas import st_canvas
 
+
 model = tf.keras.models.load_model("mnist_cnn.h5")
 
 st.title("Handwritten Digit Recognizer")
@@ -26,27 +27,25 @@ if st.button("Recognize"):
         st.warning("⚠️ Canvas is empty. Please draw a digit.")
     else:
         img_data = canvas_result.image_data
-
         try:
-            # Convert to grayscale (average RGB if needed)
-            if img_data.shape[2] == 3:  # RGB
+            if img_data.shape[2] == 4:
+                img_rgb = img_data[:, :, :3]
+                img_gray = np.mean(img_rgb, axis=2)
+            elif img_data.shape[2] == 3:
                 img_gray = np.mean(img_data, axis=2)
-            else:  # Already grayscale
+            else:
                 img_gray = img_data[:, :, 0]
 
-            # Check if the image is blank
-            if np.mean(img_gray) > 450:
+            if np.mean(img_gray) > 240:
                 st.warning("⚠️ The canvas looks blank. Please draw a digit.")
             else:
-                # Convert to PIL image
                 img = Image.fromarray(img_gray.astype(np.uint8))
-                img = img.resize((28, 28)).convert("L")
+                img = img.resize((28, 28)).convert("L") 
                 img_array = np.array(img)
-                img_array = 255 - img_array  # Invert: white background, black digit
-                img_array = img_array / 255.0
-                img_array = img_array.reshape(1, 28, 28, 1)
+                img_array = 255 - img_array  
+                img_array = img_array / 255.0 
+                img_array = img_array.reshape(1, 28, 28, 1) 
 
-                # Make prediction
                 prediction = model.predict(img_array)
                 digit = np.argmax(prediction)
 
