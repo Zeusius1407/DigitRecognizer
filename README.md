@@ -30,7 +30,7 @@ python model.py
 ```
 After the script has been executed run the following command in the terminal:
 ```
-streamlit app.py
+streamlit run app.py
 ```
 This will open a new tab in the user's browser containing a blank white canvas
 for the user to draw on.\
